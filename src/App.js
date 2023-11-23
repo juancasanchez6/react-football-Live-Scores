@@ -3,7 +3,7 @@ import axios from "axios";
 
 //Funciones de Conversión
 const convertToCelsius = (kelvin) => {
-  return (kelvin - 273.15);
+  return kelvin - 273.15;
 };
 
 const convertToKilometersPerHour = (milesPerHour) => {
@@ -29,7 +29,25 @@ function App() {
   // Funciones de conversión aplicadas a los datos
   const temperatureC = data.main ? convertToCelsius(data.main.temp) : null;
   const feelsLikeC = data.main ? convertToCelsius(data.main.feels_like) : null;
-  const windKph = data.wind ? convertToKilometersPerHour(data.wind.speed) : null;
+  const windKph = data.wind
+    ? convertToKilometersPerHour(data.wind.speed)
+    : null;
+
+
+  const convertirAModoHora = (fechaA) => {
+    const fecha = new Date(fechaA * 1000);
+    const horas = fecha.getUTCHours();
+    const minutos = fecha.getUTCMinutes();
+
+   
+    // Formatear el tiempo
+    const tiempoFormateado = `${horas.toString().padStart(2, "0")}:${minutos
+      .toString()
+      .padStart(2, "0")}`;
+
+    
+    return tiempoFormateado;
+  };
 
   return (
     <div className="App">
@@ -51,23 +69,47 @@ function App() {
             {data.main ? <h1>{temperatureC.toFixed(0)}ºC</h1> : null}
           </div>
           <div className="description">
-            {data.weather ? <p>{data.weather[0].main}</p> : null}
+            {data.weather ? <p>{data.weather[0].description}</p> : null}
           </div>
         </div>
         <div className="bottom">
-          <div className="feels">
-            {data.main ? (
-              <p className="bold">{feelsLikeC.toFixed(0)}ºC</p>
-            ) : null}{" "}
-            <p>Sensación</p>
+          <div className="bottom1">
+            <div className="feels">
+              {data.main ? (
+                <p className="bold">{feelsLikeC.toFixed(0)}ºC</p>
+              ) : null}{" "}
+              <p>Sensación</p>
+            </div>
+            <div className="humidity">
+              {data.main ? <p className="bold">{data.main.humidity}%</p> : null}
+              <p>Humedad</p>
+            </div>
+            <div className="wind">
+              {data.wind ? (
+                <p className="bold">{windKph.toFixed(0)} KM/H</p>
+              ) : null}
+              <p>Viento</p>
+            </div>
           </div>
-          <div className="humidity">
-            {data.main ? <p className="bold">{data.main.humidity}%</p> : null}
-            <p>Humedad</p>
-          </div>
-          <div className="wind">
-            {data.wind ? <p className="bold">{windKph.toFixed(2)} KM/H</p> : null}
-            <p>Viento</p>
+          <div className="bottom2">
+            <div className="feels">
+              {data.visibility ? (
+                <p className="bold">{data.visibility / 10000}Km</p>
+              ) : null}{" "}
+              <p>Visibilidad</p>
+            </div>
+            <div className="humidity">
+              {data.sys ? (
+                <p className="bold">{convertirAModoHora(data.sys.sunrise)} </p>
+              ) : null}
+              <p>Amanecer</p>
+            </div>
+            <div className="wind">
+              {data.sys ? (
+                <p className="bold">{convertirAModoHora(data.sys.sunset)} </p>
+              ) : null}
+              <p>Atarceder</p>
+            </div>
           </div>
         </div>
       </div>

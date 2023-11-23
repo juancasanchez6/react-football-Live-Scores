@@ -67,7 +67,7 @@ h1 {
 
 .container {
   max-width: 700px;
-  height: 700px;
+  height: 70vh;
   margin: auto;
   padding: 0 1rem;
   position: relative;
@@ -90,7 +90,7 @@ h1 {
 }
 
 .App .bottom {
-  display: flex;
+  display: block;
   justify-content: space-evenly;
   text-align: center;
   width: 100%;
@@ -98,6 +98,13 @@ h1 {
   padding: 1rem;
   border-radius: 12px;
   background-color: rgba(255,255,255,0.2);
+}
+
+.App .bottom1,  .bottom2 {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  padding: 1rem;
 }
 
 .bold {
