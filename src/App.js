@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+//Funciones de Conversión
+const convertToCelsius = (kelvin) => {
+  return (kelvin - 273.15);
+};
+
+const convertToKilometersPerHour = (milesPerHour) => {
+  return milesPerHour * 1.60934;
+};
+
 function App() {
   const [data, setData] = useState({});
   const [location, setLocation] = useState("");
@@ -16,6 +25,11 @@ function App() {
       setLocation("");
     }
   };
+
+  // Funciones de conversión aplicadas a los datos
+  const temperatureC = data.main ? convertToCelsius(data.main.temp) : null;
+  const feelsLikeC = data.main ? convertToCelsius(data.main.feels_like) : null;
+  const windKph = data.wind ? convertToKilometersPerHour(data.wind.speed) : null;
 
   return (
     <div className="App">
@@ -34,7 +48,7 @@ function App() {
             <p>{data.name}</p>
           </div>
           <div className="temp">
-            {data.main ? <h1>{data.main.temp}ºF</h1> : null}
+            {data.main ? <h1>{temperatureC.toFixed(0)}ºC</h1> : null}
           </div>
           <div className="description">
             {data.weather ? <p>{data.weather[0].main}</p> : null}
@@ -43,7 +57,7 @@ function App() {
         <div className="bottom">
           <div className="feels">
             {data.main ? (
-              <p className="bold">{data.main.feels_like}ºF</p>
+              <p className="bold">{feelsLikeC.toFixed(0)}ºC</p>
             ) : null}{" "}
             <p>Sensación</p>
           </div>
@@ -52,7 +66,7 @@ function App() {
             <p>Humedad</p>
           </div>
           <div className="wind">
-            {data.wind ? <p className="bold">{data.wind.speed} MPH</p> : null}
+            {data.wind ? <p className="bold">{windKph.toFixed(2)} KM/H</p> : null}
             <p>Viento</p>
           </div>
         </div>
